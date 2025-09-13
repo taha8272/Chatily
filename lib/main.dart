@@ -1,4 +1,8 @@
-import 'package:chatily/screens/onboarding_1.dart';
+import 'package:chatily/screens/auth.dart';
+import 'package:chatily/screens/onboarding/onboarding.dart';
+import 'package:chatily/screens/onboarding/onboarding_1.dart';
+import 'package:chatily/screens/onboarding/onboarding_2.dart';
+import 'package:chatily/screens/onboarding/onboarding_3.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,7 +22,8 @@ class MyApp extends StatelessWidget {
           onPrimary: Colors.white,
           secondary: Colors.teal,
           onSecondary: Colors.white,
-
+          background: Color(0xFFF5F7FB),
+          onBackground: Colors.black87,
           surface: Colors.white,
           onSurface: Colors.black87,
           error: Colors.redAccent,
@@ -32,12 +37,39 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.teal,
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 96, 43, 194), // primary
+            foregroundColor: Colors.white, // onPrimary
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24),
             borderSide: BorderSide.none,
+          ),
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w900, // Extra bold
+            color: Colors.black87,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
+            color: Colors.black87,
           ),
         ),
       ),
@@ -48,7 +80,8 @@ class MyApp extends StatelessWidget {
           onPrimary: Colors.white,
           secondary: Colors.tealAccent[200]!,
           onSecondary: Colors.black,
-
+          background: Color(0xFF181A20),
+          onBackground: Colors.white,
           surface: Color(0xFF23272F),
           onSurface: Colors.white,
           error: Colors.red[400]!,
@@ -62,6 +95,16 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Colors.tealAccent[200],
         ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blueGrey[900], // primary
+            foregroundColor: Colors.white, // onPrimary
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            textStyle: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Color(0xFF23272F),
@@ -70,9 +113,26 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide.none,
           ),
         ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.w900, // Extra bold
+            color: Colors.white,
+          ),
+          bodyMedium: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+          bodySmall: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.normal,
+            color: Colors.white,
+          ),
+        ),
       ),
       themeMode: ThemeMode.system, // Uses system setting (light/dark)
-      home: OnboardingScreen1(),
+      home: AuthScreen(),
     );
   }
 }
