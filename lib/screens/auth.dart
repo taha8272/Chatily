@@ -11,13 +11,14 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isEmail = true; // Toggle between email and phone
 
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _phoneController = TextEditingController();
+  var selectedEmail;
+  var selectedPassword;
+  var selectedPhone;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -31,15 +32,17 @@ class _AuthScreenState extends State<AuthScreen> {
                 isLogin
                     ? 'Login to get access'
                     : 'Create a new account to get started',
-                style: Theme.of(context).textTheme.bodySmall,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall!.copyWith(fontSize: 14),
               ),
               const SizedBox(height: 40),
               Container(
-                width: 300,
+                width: 400,
                 height: 50,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 245, 242, 242),
-                  borderRadius: BorderRadius.circular(18),
+                  color: const Color.fromARGB(255, 231, 229, 229),
+                  borderRadius: BorderRadius.circular(35),
                 ),
                 child: Stack(
                   children: [
@@ -50,11 +53,11 @@ class _AuthScreenState extends State<AuthScreen> {
                       duration: Duration(microseconds: 300),
                       curve: Curves.easeInOut,
                       child: Container(
-                        width: 150,
-                        height: 50,
+                        width: 200,
+                        height: 45,
                         decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(30),
+                          color: const Color.fromARGB(255, 177, 211, 84),
+                          borderRadius: BorderRadius.circular(35),
                         ),
                       ),
                     ),
@@ -68,10 +71,19 @@ class _AuthScreenState extends State<AuthScreen> {
                               });
                             },
 
-                            child: Center(child: Text('Email')),
+                            child: Center(
+                              child: Text(
+                                'Email',
+                                style: Theme.of(context).textTheme.bodyMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 18,
+                                    ),
+                              ),
+                            ),
                           ),
                         ),
-                        const SizedBox(width: 50),
+                        const SizedBox(width: 70),
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
@@ -80,7 +92,16 @@ class _AuthScreenState extends State<AuthScreen> {
                               });
                             },
 
-                            child: Center(child: Text('Phone')),
+                            child: Center(
+                              child: Text(
+                                'Phone',
+                                style: Theme.of(context).textTheme.bodyMedium!
+                                    .copyWith(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 18,
+                                    ),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -96,23 +117,217 @@ class _AuthScreenState extends State<AuthScreen> {
                     SizedBox(height: 24),
                     // Email or Phone Field
                     if (isEmail)
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: InputDecoration(labelText: 'Email'),
-                        keyboardType: TextInputType.emailAddress,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Email',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 40,
+                            child: TextFormField(
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                  horizontal: 16,
+                                ),
+                                hintText: 'Enter your email',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: const Color.fromARGB(
+                                      255,
+                                      58,
+                                      56,
+                                      56,
+                                    ),
+                                    width: 0.5,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: const Color.fromARGB(
+                                      255,
+                                      151,
+                                      147,
+                                      147,
+                                    ),
+                                    width: 1,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              onSaved: (newValue) {
+                                selectedEmail = newValue;
+                              },
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    !value.contains("@gmail.com")) {
+                                  return 'Enter a valid email address';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
                       )
                     else
-                      TextFormField(
-                        controller: _phoneController,
-                        decoration: InputDecoration(labelText: 'Phone Number'),
-                        keyboardType: TextInputType.phone,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Phone Number',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            height: 40,
+                            child: TextFormField(
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                  horizontal: 16,
+                                ),
+                                hintText: 'Enter your Phone',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: const Color.fromARGB(
+                                      255,
+                                      58,
+                                      56,
+                                      56,
+                                    ),
+                                    width: 0.5,
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: const Color.fromARGB(
+                                      255,
+                                      151,
+                                      147,
+                                      147,
+                                    ),
+                                    width: 1,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                  borderSide: BorderSide(
+                                    color: Colors.grey,
+                                    width: 0.5,
+                                  ),
+                                ),
+                              ),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                              keyboardType: TextInputType.emailAddress,
+                              onSaved: (newValue) {
+                                selectedPhone = newValue;
+                              },
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.length < 9) {
+                                  return 'Enter a valid phone number';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                     SizedBox(height: 16),
                     // Password Field (for both login/signup)
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(labelText: 'Password'),
-                      obscureText: true,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Password',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        SizedBox(height: 10),
+                        Container(
+                          height: 40,
+                          child: TextFormField(
+                            obscureText: true,
+                            cursorColor: Colors.black,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 14,
+                                horizontal: 16,
+                              ),
+                              hintText: 'Enter Password',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                  color: const Color.fromARGB(255, 58, 56, 56),
+                                  width: 0.5,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                  color: const Color.fromARGB(
+                                    255,
+                                    151,
+                                    147,
+                                    147,
+                                  ),
+                                  width: 1,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.5,
+                                ),
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.normal,
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            onSaved: (newValue) {
+                              selectedPassword = newValue;
+                            },
+                            validator: (value) {
+                              if (value == null ||
+                                  value.isEmpty ||
+                                  value.length < 6) {
+                                return 'Enter a valid password';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 24),
                     // Login/Signup Button
@@ -135,6 +350,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         isLogin
                             ? "Don't have an account? Sign Up"
                             : "Already have an account? Login",
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                     ),
                   ],

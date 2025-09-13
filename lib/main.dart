@@ -67,7 +67,7 @@ class MyApp extends StatelessWidget {
             color: Colors.black87,
           ),
           bodySmall: TextStyle(
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: FontWeight.normal,
             color: Colors.black87,
           ),
@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
             color: Colors.white,
           ),
           bodySmall: TextStyle(
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: FontWeight.normal,
             color: Colors.white,
           ),
