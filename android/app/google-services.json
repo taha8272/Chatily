@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "309615046516",
+    "project_id": "chatily-app-548bb",
+    "storage_bucket": "chatily-app-548bb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309615046516:android:33311e1324834a07248621",
+        "android_client_info": {
+          "package_name": "com.example.chatily"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBC2NUWphoiMhB20Oe6G_RxjHhmYlDVVWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

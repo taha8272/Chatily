@@ -3,9 +3,12 @@ import 'package:chatily/screens/onboarding/onboarding.dart';
 import 'package:chatily/screens/onboarding/onboarding_1.dart';
 import 'package:chatily/screens/onboarding/onboarding_2.dart';
 import 'package:chatily/screens/onboarding/onboarding_3.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -47,6 +50,7 @@ class MyApp extends StatelessWidget {
             textStyle: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
+
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
