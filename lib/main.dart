@@ -1,8 +1,11 @@
 import 'package:chatily/screens/auth.dart';
+import 'package:chatily/screens/email_verify.dart';
+import 'package:chatily/screens/home.dart';
 import 'package:chatily/screens/onboarding/onboarding.dart';
 import 'package:chatily/screens/onboarding/onboarding_1.dart';
 import 'package:chatily/screens/onboarding/onboarding_2.dart';
 import 'package:chatily/screens/onboarding/onboarding_3.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -136,7 +139,30 @@ class MyApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system, // Uses system setting (light/dark)
-      home: AuthScreen(),
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          final user = snapshot.data;
+          if (user == null) {
+            return AuthScreen(); // your login/register screen
+          }
+
+          final providerIds = user.providerData
+              .map((p) => p.providerId)
+              .toList();
+          final isEmail = providerIds.contains('password');
+
+          if (isEmail && !user.emailVerified) {
+            return EmailVerifyScreen(user: user);
+          }
+
+          return OnboardingScreen();
+        },
+      ),
     );
   }
 }

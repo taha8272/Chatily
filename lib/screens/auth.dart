@@ -20,57 +20,87 @@ class _AuthScreenState extends State<AuthScreen> {
   var lastName;
 
   void onSaved() async {
-    bool isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) return;
     _formKey.currentState!.save();
-    if (isLogin) {
-      if (isEmail) {
-        try {
-          final credentials = await FirebaseAuth.instance
-              .signInWithEmailAndPassword(
-                email: selectedEmail,
-                password: selectedPassword,
-              );
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'user-not-found') {
-            print('No user found for that email.');
-          } else if (e.code == 'wrong-password') {
-            print('Wrong password provided for that user.');
+
+    try {
+      if (isLogin) {
+        // ---------------- EMAIL LOGIN ----------------
+        if (isEmail) {
+          final cred = await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: selectedEmail,
+            password: selectedPassword,
+          );
+
+          final user = cred.user!;
+          if (!user.emailVerified) {
+            // force StreamBuilder to show EmailVerifyScreen
+            // we do NOT push Home manually
+            await FirebaseAuth.instance.signOut();
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: selectedEmail,
+              password: selectedPassword,
+            );
+            await user.sendEmailVerification(); // ensure they got one
           }
         }
-      } else {}
-    } else if (!isLogin) {
-      if (isEmail) {
-        try {
-          final credentials = await FirebaseAuth.instance
+        // ---------------- PHONE LOGIN ----------------
+        else {
+          await FirebaseAuth.instance.verifyPhoneNumber(
+            phoneNumber: selectedPhone,
+            verificationCompleted: (PhoneAuthCredential credential) async {
+              await FirebaseAuth.instance.signInWithCredential(credential);
+            },
+            verificationFailed: (FirebaseAuthException e) {
+              print("Phone verification failed: ${e.message}");
+            },
+            codeSent: (verificationId, _) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => OTPScreen(verificationId: verificationId),
+                ),
+              );
+            },
+            codeAutoRetrievalTimeout: (_) {},
+          );
+        }
+      } else {
+        // ---------------- EMAIL SIGNUP ----------------
+        if (isEmail) {
+          final cred = await FirebaseAuth.instance
               .createUserWithEmailAndPassword(
                 email: selectedEmail,
                 password: selectedPassword,
               );
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            print('The password provided is too weak.');
-          } else if (e.code == 'email-already-in-use') {
-            print('The account already exists for that email.');
-          }
+
+          final user = cred.user!;
+          await user.sendEmailVerification();
+          // Do not push anything, StreamBuilder will show EmailVerifyScreen
         }
-      } else {
-        await FirebaseAuth.instance.verifyPhoneNumber(
-          verificationCompleted: (PhoneAuthCredential credential) {},
-          verificationFailed: (FirebaseAuthException ex) {},
-          codeSent: (verificationId, forceResendingToken) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => OTPScreen(verificationId: verificationId),
-              ),
-            );
-          },
-          codeAutoRetrievalTimeout: (verificationId) {},
-          phoneNumber: selectedPhone,
-        );
+        // ---------------- PHONE SIGNUP ----------------
+        else {
+          await FirebaseAuth.instance.verifyPhoneNumber(
+            phoneNumber: selectedPhone,
+            verificationCompleted: (PhoneAuthCredential credential) async {
+              await FirebaseAuth.instance.signInWithCredential(credential);
+            },
+            verificationFailed: (FirebaseAuthException e) {
+              print("Phone verification failed: ${e.message}");
+            },
+            codeSent: (verificationId, _) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => OTPScreen(verificationId: verificationId),
+                ),
+              );
+            },
+            codeAutoRetrievalTimeout: (_) {},
+          );
+        }
       }
+    } on FirebaseAuthException catch (e) {
+      print("Auth error: ${e.code} - ${e.message}");
     }
   }
 
